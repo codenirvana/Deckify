@@ -25,7 +25,15 @@ module.exports.views = {
   *                                                                          *
   ***************************************************************************/
 
-  // extension: 'ejs',
+  extension: 'pug',
+
+  getRenderFn: function() {
+    // Import `consolidate`.
+    var consolidate = require('consolidate');
+    // Return the rendering function for Swig.
+    return consolidate.pug;
+  },
+
 
   /***************************************************************************
   *                                                                          *
@@ -36,6 +44,7 @@ module.exports.views = {
   *                                                                          *
   ***************************************************************************/
 
-  layout: 'layouts/layout'
+  // layout: 'layouts/layout'
+  layout: false
 
 };

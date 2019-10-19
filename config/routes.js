@@ -25,7 +25,9 @@ module.exports.routes = {
 
   '/authorize': 'AuthController.authorize',
 
-  '/authorize/callback': 'AuthController.callbackHandler'
+  '/authorize/callback': 'AuthController.callbackHandler',
+
+  '/create': { view: 'pages/create' },
 
 
   /***************************************************************************
