@@ -9,7 +9,7 @@ module.exports = {
       autoIncrement: true
     },
     email: {
-      type: 'email',
+      type: 'string',
       required: true,
       unique: true
     },

@@ -17,6 +17,13 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+  '*': false,
 
+  DeckController: {
+    create: []
+  },
+
+  LinkController: {
+    create: []
+  }
 };
