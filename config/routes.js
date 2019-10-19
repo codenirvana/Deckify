@@ -26,6 +26,7 @@ module.exports.routes = {
   '/authorize/callback': 'AuthController.callbackHandler',
 
   // LinkController
-  'POST /v1/links': 'LinkController.create'
+  'POST /v1/links': 'LinkController.create',
+  'POST /v1/links/scrape': 'LinkController.scrape'
 
 };

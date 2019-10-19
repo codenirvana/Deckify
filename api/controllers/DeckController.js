@@ -27,6 +27,7 @@ module.exports = {
     let { description, type, category } = req.body,
       user = _.get(req, 'session.userId', 1),
       name = req.body.name.replace(/[^a-z0-9_]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+
     Deck
       .create({
         user,
