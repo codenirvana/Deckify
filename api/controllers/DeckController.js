@@ -79,7 +79,7 @@ module.exports = {
       });
   },
 
-  getDeck: (req, res) => {
+  getDeckView: (req, res) => {
     const username = _.get(req.params, 'username'),
       deckName = _.get(req.params, 'deckname');
 
@@ -104,8 +104,8 @@ module.exports = {
           .exec((err, deck) => {
             if (err || _.isUndefined(deck)) {
               return next(new Error('deckNotFoundError'));
-            } 
-            
+            }
+
             return next(null, deck);
           });
       }
@@ -121,10 +121,12 @@ module.exports = {
         });
       }
 
-      return res.json({
-        data: deck,
-        meta: {}
-      });
+      // return res.json({
+      //   data: deck,
+      //   meta: {}
+      // });
+
+      res.view('pages/viewDeck', deck);
     });
   },
 
