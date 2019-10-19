@@ -17,6 +17,17 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+  '*': 'sessionAuth',
+  AuthController: {
+    authorize: [],
+    callbackHandler: []
+  },
 
+  DeckController: {
+    create: ['sessionAuth']
+  },
+
+  LinkController: {
+    create: ['sessionAuth']
+  }
 };

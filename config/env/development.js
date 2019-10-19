@@ -3,11 +3,11 @@ require('dotenv').config();
 module.exports = {
   port: process.env.PORT || 1337,
 
-  environment: 'production',
+  environment: 'development',
 
   models: {
     schema: true,
-    migrate: 'safe',
+    migrate: 'alter',
     datastore: 'mySql',
     cascadeOnDestroy: false
   },
