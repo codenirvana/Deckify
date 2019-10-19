@@ -7,7 +7,7 @@
 
 module.exports = {
   create: (req, res) => {
-    const { name, link, comment, deckId } = req.body;
+    const { name, link, comment, deckId, linkImageUrl } = req.body;
 
     async.waterfall([
       (next) => {
@@ -28,7 +28,8 @@ module.exports = {
           .create({
             name,
             link,
-            comment
+            comment,
+            linkImageUrl
           })
           .fetch()
           .exec((err, link) => {
@@ -52,6 +53,24 @@ module.exports = {
 
       return res.json({
         data: {},
+        meta: {}
+      });
+    });
+  },
+
+  scrape: (req, res) => {
+    const { link } = req.body;
+
+    UtilService.scrape(link, (err, data) => {
+      if (err) {
+        return res.serverError({
+          name: 'serverError',
+          message: err.message
+        });
+      }
+
+      return res.json({
+        data: data,
         meta: {}
       });
     });
