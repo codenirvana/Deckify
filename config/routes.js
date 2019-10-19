@@ -12,9 +12,10 @@ module.exports.routes = {
   // Views
   '/': { view: 'pages/homepage' },
   '/login': { view: 'pages/login' },
-  '/create': { view: 'pages/create' },
 
   // DeckController
+  'GET /create': 'DeckController.createView',
+  'GET /create/:id': 'DeckController.authorView',
   'POST /v1/decks': 'DeckController.create',
 
   // AuthController

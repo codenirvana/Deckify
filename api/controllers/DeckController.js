@@ -6,6 +6,23 @@
  */
 
 module.exports = {
+  createView: (req, res) => {
+    res.view('pages/create');
+  },
+
+  authorView: (req, res) => {
+    Deck
+      .findOne({
+        id: req.param('id')
+      }, (err, deck) => {
+        if (err || !deck) {
+          return res.redirect('/create');
+        }
+
+        res.view('pages/author', deck);
+      });
+  },
+
   create: (req, res) => {
     const { name, description, type, category } = req.body,
       user = _.get(req, 'session.userId', 1);
