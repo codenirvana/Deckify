@@ -17,6 +17,9 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
-
+  '*': 'sessionAuth',
+  'AuthController': {
+    authorize: [],
+    callbackHandler: []
+  }
 };

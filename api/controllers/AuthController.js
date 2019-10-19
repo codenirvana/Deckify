@@ -2,7 +2,9 @@ const passport = require('passport');
 
 module.exports = {
   callbackHandler: function (req, res) {
-    passport.authenticate('github', { failureRedirect: '/login' }, function (err) {
+    passport.authenticate('github', {
+      failureRedirect: '/login', authType: 'rerequest', accessType: 'offline', prompt: 'consent', includeGrantedScopes: true
+    }, function (err) {
       if (err) {
         res.status(403);
         return res.redirect('/login');
