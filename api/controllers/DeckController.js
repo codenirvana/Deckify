@@ -7,7 +7,7 @@
 
 module.exports = {
   createView: (req, res) => {
-    res.view('pages/create');
+    res.view('pages/deck/create');
   },
 
   authorView: (req, res) => {
@@ -19,7 +19,7 @@ module.exports = {
           return res.redirect('/create');
         }
 
-        res.view('pages/author', deck);
+        res.view('pages/deck/author', deck);
       });
   },
 
@@ -127,7 +127,7 @@ module.exports = {
       //   meta: {}
       // });
 
-      res.view('pages/viewDeck', deck);
+      res.view('pages/deck/view', deck);
     });
   },
 
@@ -162,7 +162,7 @@ module.exports = {
               });
             }
 
-            res.view('pages/listDecks', {decks});
+            res.view('pages/deck/list', {decks});
           });
       });
   }

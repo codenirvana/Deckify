@@ -1,7 +1,31 @@
 html
   head
     title Deckify
-    block scripts
+
+    block default_styles
+      link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
+      link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap")
+
+      style(type='text/css').
+        *,
+        *:after,
+        *::before {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          text-decoration: none;
+          list-style-type: none;
+          outline: none;
+        }
+
+        #navigation {
+          box-shadow: 0 0 1.8rem rgba(0,0,0,.15);
+          padding: 10px 10px 15px 10px;
+        }
+
+    block styles
+
+    block default_scripts
       script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js")
 
       script.
@@ -31,8 +55,13 @@ html
           });
         }
 
+    block scripts
+
   body
-    block header
-      include header
-    block content
-    block footer
+    #navigation
+      h1.logo(style="font-family: 'Abril Fatface', cursive;") Deckify
+      block navigation
+    #content
+      block content
+    #footer
+      block footer
