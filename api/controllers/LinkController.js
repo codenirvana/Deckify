@@ -7,7 +7,7 @@
 
 module.exports = {
   create: (req, res) => {
-    const { name, link, comment, deckId, linkImageUrl } = req.body;
+    const { name, link, comment, deckId, imageUrl } = req.body;
 
     async.waterfall([
       (next) => {
@@ -29,7 +29,7 @@ module.exports = {
             name,
             link,
             comment,
-            linkImageUrl
+            imageUrl
           })
           .fetch()
           .exec((err, link) => {
