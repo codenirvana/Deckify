@@ -16,6 +16,9 @@ module.exports.routes = {
 
   // DeckController
   'POST /v1/decks': 'DeckController.create',
+  'POST /v1/decks/:id/publish': 'DeckController.publish',
+  'GET /:username/:deckname': 'DeckController.getDeck',
+  'GET /v1/decks': 'DeckController.getUserDecks',
 
   // AuthController
   '/authorize': 'AuthController.authorize',
