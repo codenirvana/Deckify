@@ -21,6 +21,12 @@ module.exports.routes = {
 
   '/': { view: 'pages/homepage' },
 
+  '/login': { view: 'pages/login' },
+
+  '/authorize': 'AuthController.authorize',
+
+  '/authorize/callback': 'AuthController.callbackHandler'
+
 
   /***************************************************************************
   *                                                                          *

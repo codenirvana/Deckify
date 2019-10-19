@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt-nodejs');
-
 module.exports = {
   schema: true,
   primaryKey: 'id',
@@ -9,9 +7,8 @@ module.exports = {
       autoIncrement: true
     },
     email: {
-      type: 'email',
-      required: true,
-      unique: true
+      type: 'string',
+      allowNull: true
     },
     username: {
       type: 'string',
@@ -21,7 +18,8 @@ module.exports = {
       type: 'string'
     },
     githubRefreshToken: {
-      type: 'string'
+      type: 'string',
+      allowNull: true
     },
     githubProfileData: {
       type: 'json'
