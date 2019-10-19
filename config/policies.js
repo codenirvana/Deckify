@@ -24,7 +24,10 @@ module.exports.policies = {
   },
 
   DeckController: {
-    create: ['sessionAuth']
+    create: ['sessionAuth', 'validateDeckCreate'],
+    publish: ['sessionAuth'],
+    getDeck: [],
+    getUserDecks: ['sessionAuth']
   },
 
   LinkController: {

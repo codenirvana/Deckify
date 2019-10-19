@@ -9,6 +9,10 @@ module.exports = {
     user: {
       model: 'user'
     },
+    isPublished: {
+      type: 'number',
+      defaultsTo: 0
+    },
     name: {
       type: 'string',
       required: true
