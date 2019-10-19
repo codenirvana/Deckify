@@ -38,6 +38,6 @@ block content
           return alert('Something went wrong!');
         }
 
-        console.log(response);
+        window.location = '/create/' + response.data.id;
       });
     });
