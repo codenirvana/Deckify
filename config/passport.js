@@ -22,7 +22,6 @@ passport.use(new GitHubStrategy({
     User.findOrCreate({
       username: user.username
     }, user, function (err, user) {
-      console.log({err, user})
       return done(err, user);
     });
   }
