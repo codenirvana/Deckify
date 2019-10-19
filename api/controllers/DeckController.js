@@ -131,25 +131,39 @@ module.exports = {
     });
   },
 
-  getUserDecks: (req, res) => {
-    const user = _.get(req, 'session.userId', 1);
+  getUserDecksView: (req, res) => {
+    const username = req.param('username'),
+      sessionUserId = _.get(req, 'session.userId', 1);
 
-    Deck
-      .find({
-        user
-      })
-      .exec((err, decks) => {
-        if (err) {
+    User
+      .findOne({username})
+      .exec((err, user) => {
+        if (err || !user) {
           return res.serverError({
             name: 'serverError',
-            message: err.message
+            message: err ? err.message : 'user not found'
           });
         }
 
-        return res.json({
-          data: decks,
-          meta: {}
-        });
+        let query = { user: user.id };
+
+        if (user.id !== sessionUserId) {
+          query.isPublished = 1;
+          query.type = 'public';
+        }
+
+        Deck
+          .find(query)
+          .exec((err, decks) => {
+            if (err) {
+              return res.serverError({
+                name: 'serverError',
+                message: err.message
+              });
+            }
+
+            res.view('pages/listDecks', {decks});
+          });
       });
   }
 };
