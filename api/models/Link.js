@@ -17,6 +17,9 @@ module.exports = {
     comment: {
       type: 'string'
     },
+    linkImageUrl: {
+      type: 'string'
+    },
     decks: {
       collection: 'deck',
       via: 'links'
