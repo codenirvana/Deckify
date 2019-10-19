@@ -10,7 +10,7 @@ module.exports = {
     res.view('pages/deck/create');
   },
 
-  authorView: (req, res) => {
+  editView: (req, res) => {
     Deck
       .findOne({
         id: req.param('id')
@@ -19,7 +19,7 @@ module.exports = {
           return res.redirect('/create');
         }
 
-        res.view('pages/deck/author', deck);
+        res.view('pages/deck/edit', deck);
       });
   },
 

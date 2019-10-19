@@ -1,27 +1,80 @@
 extends ../../layouts/default.pug
 
+block styles
+  style(type='text/css').
+    h2 {
+      font-weight: 700;
+      font-size: 30px;
+    }
+
+    #create-deck {
+      padding: 30px;
+      margin-top: 40px;
+      margin-left: 30%;
+      margin-right: 30%;
+    }
+
+    #create-deck-form .header {
+      font-weight: 200;
+      font-size: 15px;
+      opacity: 0.5;
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }
+
+    #create-deck-form button {
+      padding: .75em 1.6em .7em;
+      background-color: #334ac0;
+      border: none;
+      color: #fff;
+      font-weight: bolder;
+      cursor: pointer;
+      transition: box-shadow 120ms,background-color 120ms;
+      box-shadow: 0 0.1rem 0.1rem transparent;
+      text-align: center;
+      border-radius: 3px;
+      font-size: 20px;
+      margin-top: 25px;
+      width: 100%;
+    }
+
+    #create-deck-form button:hover {
+      background: #586ee0;
+      box-shadow: 0 0.1rem 0.1rem rgba(0,0,0,.3);
+      outline: 0;
+    }
+
+
 block content
   #create-deck
-    h1 Create a new deck
+    h2 Create a new deck
+    hr
     form#create-deck-form(data-url="/v1/decks")
-      .header Deck name
+      .header Unique deck name
       .value
         input(type="text", name="name")
 
-      .header Description (optional)
+      .header Short description
       .value
         input(type="text", name="description")
 
       .header Category
       .value
-        input(type="text", name="category")
+        select(name="category")
+          option(value="tech") Tech
+          option(value="business") Business
+          option(value="other") Other
 
-      .header Type
+      .header Access type
       .value
-        input(type="text", name="type")
+        select(name="type")
+          option(value="public") Public
+          option(value="private") Private
 
       button(type="submit") Create
 
+
+block scripts
   script.
     $('#create-deck-form').on('submit', function (e) {
       e.preventDefault();
@@ -34,7 +87,7 @@ block content
         data: FORM_DATA(self)
       }, function (error, response) {
         if (error) {
-          console.log(error);
+          console.error(error);
           return alert('Something went wrong!');
         }
 

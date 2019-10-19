@@ -1,7 +1,7 @@
 extends ../../layouts/default.pug
 
 block content
-  #author-deck
+  #edit-deck
     h1 #{name}
     form#create-deck-form(data-url="/v1/links")
       input(type="hidden", name="deckId", value=id)
@@ -28,6 +28,8 @@ block content
 
   button#publish-deck(type="submit") Publish Deck
 
+
+block scripts
   script.
     $('#create-deck-form').on('submit', function (e) {
       e.preventDefault();
@@ -40,7 +42,7 @@ block content
         data: FORM_DATA(self)
       }, function (error, response) {
         if (error) {
-          console.log(error);
+          console.error(error);
           return alert('Something went wrong!');
         }
 
@@ -59,7 +61,7 @@ block content
         data: FORM_DATA(self)
       }, function (error, response) {
         if (error) {
-          console.log(error);
+          console.error(error);
           return alert('Something went wrong!');
         }
 
