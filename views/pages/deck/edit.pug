@@ -205,6 +205,14 @@ block scripts
           return alert('Something went wrong!');
         }
 
+        Swal.fire({
+          position: 'center',
+          type: 'success',
+          title: 'Your card has been saved',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
         addCard(data);
         reset();
       });
@@ -235,7 +243,13 @@ block scripts
           return alert('Something went wrong!');
         }
 
-        console.log(response);
+        Swal.fire({
+          position: 'center',
+          type: 'success',
+          title: 'Your deck is published!',
+          showConfirmButton: false,
+          timer: 1000
+        });
       });
     });
 
@@ -267,11 +281,33 @@ block scripts
 
       dirty = true;
 
+      let timerInterval
+      Swal.fire({
+        title: 'Fetching link details...',
+        timer: 10000,
+        onBeforeOpen: () => {
+          Swal.showLoading()
+          timerInterval = setInterval(() => {
+            if (!Swal.getContent().querySelector('strong')) {
+              return;
+            }
+
+            Swal.getContent().querySelector('strong')
+              .textContent = Swal.getTimerLeft()
+          }, 100)
+        },
+        onClose: () => {
+          clearInterval(timerInterval)
+        }
+      });
+
       REQUEST({
         method: 'POST',
         url: '/v1/links/scrape',
         data: { link }
       }, function (error, response) {
+        Swal.close();
+
         if (error) {
           console.error(error);
           return done(error);
