@@ -19,6 +19,9 @@ module.exports = {
           return res.redirect('/create');
         }
 
+        // @todo: fetch links and attach to deck object
+        // next, render all the existing links in the edit view.
+
         res.view('pages/deck/edit', deck);
       });
   },

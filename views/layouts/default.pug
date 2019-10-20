@@ -40,23 +40,37 @@ html
         #navigation {
           box-shadow: 0 0 1.8rem rgba(0,0,0,.15);
           padding: 10px 10px 15px 10px;
+          font-family: 'Raleway', sans-serif;
+          color: #2b2a35;
         }
 
         #navigation .logo {
+          color: #2b2a35;
+          letter-spacing: 2px;
           font-family: 'Abril Fatface', cursive;
           font-weight: 700;
           font-size: 35px;
+          display: inline-block;
+          margin-right: 50px;
+          position: relative;
+          text-decoration:none;
+        }
+
+        #navigation a {
+          color: #2b2a35;
         }
 
         #content {
           font-family: 'Raleway', sans-serif;
+          color: #2b2a35;
         }
 
     block styles
 
   body
     #navigation
-      h1.logo Deckify
+      a(href="/")
+        h1.logo Deckify
       block navigation
     #content
       block content

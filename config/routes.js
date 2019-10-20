@@ -13,8 +13,11 @@ module.exports.routes = {
   '/': { view: 'pages/homepage' },
   '/login': { view: 'pages/login' },
 
+  // NavController
+  'GET /create': 'NavController.createDeck',
+  'GET /me': 'NavController.userDecks',
+
   // DeckController
-  'GET /create': 'DeckController.createView',
   'GET /create/:id': 'DeckController.editView',
   'POST /v1/decks': 'DeckController.create',
   'POST /v1/decks/:id/publish': 'DeckController.publish',
