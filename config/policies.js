@@ -34,6 +34,7 @@ module.exports.policies = {
     create: ['sessionAuth', 'validateDeckCreate'],
     publish: ['sessionAuth'],
     getDeck: [],
+    getDeckView: [],
     getUserDecks: ['sessionAuth'],
     removeLinkAssociation: []
   },
