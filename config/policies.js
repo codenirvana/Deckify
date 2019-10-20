@@ -21,7 +21,8 @@ module.exports.policies = {
 
   NavController: {
     createDeck: [],
-    userDecks: []
+    userDecks: [],
+    home: []
   },
 
   AuthController: {
