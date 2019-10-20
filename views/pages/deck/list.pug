@@ -5,7 +5,8 @@ block content
     ul
       each deck in decks
         li
-          div name: #{deck.name}
-          div description: #{deck.description}
-          div type: #{deck.type}
-          div category: #{deck.category}
+          a(href='/create/' + deck.id)
+            div name: #{deck.name}
+            div description: #{deck.description}
+            div type: #{deck.type}
+            div category: #{deck.category}

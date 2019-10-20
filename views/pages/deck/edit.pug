@@ -15,9 +15,31 @@ block styles
       margin-right: 10%;
     }
 
-    #add-card-form button {
+    #add-card-form .value {
+      margin-bottom: 15px;
+    }
+
+    #add-card-form input[type=text] {
+      border: 0;
+      border-bottom: 1px solid #dddfe5;
+      border-radius: 0;
+    }
+
+    .img-container {
+      width: 100%;
+      height: 300px;
+    }
+
+    .img-container img {
+      height: 100%;
+      max-width: 100%;
+      display: block;
+      margin: auto;
+    }
+
+    #add-card-btn {
       padding: .75em 1.6em .7em;
-      background-color: #334ac0;
+      background: linear-gradient(91.14deg,#3c5af3 0,#8253ff 122.55%);
       border: none;
       color: #fff;
       font-weight: bolder;
@@ -27,12 +49,12 @@ block styles
       text-align: center;
       border-radius: 3px;
       font-size: 20px;
-      margin-top: 25px;
+      margin-top: 10px;
       width: 100%;
     }
 
-    #add-card-form button:hover {
-      background: #586ee0;
+    #add-card-btn:hover {
+      background: linear-gradient(91.14deg,#8253ff 0,#3c5af3 122.55%);
       box-shadow: 0 0.1rem 0.1rem rgba(0,0,0,.3);
       outline: 0;
     }
@@ -43,8 +65,8 @@ block styles
       border-radius: 0;
     }
 
-    #card-link:focus {
-      border-bottom: 1px solid #586ee0;
+    #add-card-form #card-link:focus {
+      border-bottom: 1px solid #3c5af3;
     }
 
     .link-title, .link-comment, .link-image, .link-btn {
@@ -62,11 +84,11 @@ block styles
       position: absolute;
       right: 8px;
       top: 8px;
-      background-image: linear-gradient(115deg,#4fcf70,#fad648,#a767e5,#12bcfe,#44ce7b);
-      border-radius: 6px;
       box-sizing: border-box;
       font-weight: 600;
       cursor: pointer;
+      border: 2px solid #fff;
+      border-radius: 6px;
     }
 
     @keyframes publish_btn_rainbow {
@@ -95,10 +117,9 @@ block styles
     }
 
     #publish-deck span {
-      padding: 15px;
+      padding: 12px;
       font-size: 16px;
       align-items: center;
-      background: #fff;
       border-radius: 3px;
       display: inline-block;
       width: calc(100% - 8px);
@@ -106,11 +127,37 @@ block styles
       margin: 3px;
       box-sizing: border-box;
       transition: background .5s ease;
+      font-weight: 700;
+    }
+
+    #cards {
+      padding: 10px 25px;
+      box-shadow: inset 0px 4px 10px 0px rgba(0, 0, 0, 0.06);
+    }
+
+    #cards .card {
+      overflow: hidden;
+      padding: 10px;
+      border-radius: 3px;
+      box-shadow: 0 0 0 1px #dddfe5;
+      margin: auto;
+      background: #fff;
+      margin: 20px 0;
+    }
+
+    #cards .card:hover {
+      box-shadow: 0 0 0 1px #3c5af3;
+    }
+
+    #cards a {
+      font-weight: 500;
+      color: #2b2a35;
     }
 
 block navigation
-  a#publish-deck
-    span Publish
+  if !isPublished
+    a#publish-deck
+      span Publish
 
 block content
   #edit-deck
@@ -130,22 +177,27 @@ block content
 
       .link-image.value
         input(type="hidden", name="imageUrl", placeholder="Card image")
+        .img-container
 
-      button.link-btn(type="submit") Add Card
+    button#add-card-btn.link-btn(type="submit") Add Card
 
   #cards
+    h3 In your deck...
+    each link in links
+      a(href=link.link, target="_blank")
+        .card #{link.name}
 
 block scripts
   script.
-    $('#add-card-form').on('submit', function (e) {
-      e.preventDefault();
+    let dirty = false;
 
-      const self = $(this),
-        data = FORM_DATA(self);
+    $('#add-card-btn').on('click', function (e) {
+      const $form = $('#add-card-form'),
+        data = FORM_DATA($form);
 
       REQUEST({
         method: 'POST',
-        url: self.data('url'),
+        url: $form.data('url'),
         data: data
       }, function (error, response) {
         if (error) {
@@ -154,7 +206,17 @@ block scripts
         }
 
         addCard(data);
-        self.trigger('reset');
+        reset();
+      });
+    });
+
+    $('#add-card-form').on('submit', function (e) {
+      e.preventDefault();
+
+      initCard($("#card-link").val(), function (err) {
+        if (err) { return; }
+
+        $('.link-title, .link-comment, .link-image, .link-btn').show();
       });
     });
 
@@ -181,7 +243,7 @@ block scripts
       const self = $(this);
 
       setTimeout(function () {
-        initCard(self.val().trim(), function (err) {
+        initCard(self.val(), function (err) {
           if (err) { return; }
 
           $('.link-title, .link-comment, .link-image, .link-btn').show();
@@ -189,7 +251,22 @@ block scripts
       }, 100);
     });
 
+    function reset () {
+      $('#add-card-form').trigger('reset');
+      $('.link-title, .link-comment, .link-image, .link-btn').hide();
+      $('#card-link').prop('readOnly', false);
+      $('.link-image .img-container').html('');
+
+      dirty = false;
+    }
+
     function initCard (link, done) {
+      if (dirty) {
+        done && done();
+      }
+
+      dirty = true;
+
       REQUEST({
         method: 'POST',
         url: '/v1/links/scrape',
@@ -200,14 +277,16 @@ block scripts
           return done(error);
         }
 
+        $('#card-link').prop('readOnly', true);
+
         $('.link-title input').val(response.data.title);
         $('.link-image input').val(response.data.image);
-        $('.link-image ').prepend($('<img>',{src: response.data.image}));
+        $('.link-image .img-container').html($('<img>',{src: response.data.image}));
 
         return done();
       });
     }
 
     function addCard (card) {
-      $('#cards').prepend(`<div>${card.link}</div>`);
+      $('#cards').append(`<a href=${card.link} target="_blank"><div class='card'>${card.name}</div></a>`);
     }

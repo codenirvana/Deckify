@@ -10,10 +10,10 @@
 
 module.exports.routes = {
   // Views
-  '/': { view: 'pages/homepage' },
   '/login': { view: 'pages/login' },
 
   // NavController
+  'GET /': 'NavController.home',
   'GET /create': 'NavController.createDeck',
   'GET /me': 'NavController.userDecks',
 
