@@ -1,12 +1,118 @@
 extends ../../layouts/default.pug
 
+block styles
+  style(type='text/css').
+    * {
+      box-sizing: border-box;
+    }
+
+    .nav {
+      display: inline-block;
+      position: absolute;
+      right: 20px;
+      top: 22px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .nav a {
+      margin-left: 25px;
+    }
+
+    .md-chip {
+      display: inline-block;
+      background: linear-gradient(91.14deg,#3c5af3 0,#8253ff 122.55%);
+      padding: 0 14px;
+      border-radius: 32px;
+      font-size: 13px;
+      &.md-chip-hover:hover {
+        background: #ccc;
+      }
+    }
+
+    /* Float four columns side by side */
+    .column {
+      float: left;
+      width: 25%;
+      padding: 12px;
+    }
+
+    /* Remove extra left and right margins, due to padding */
+    .row {margin: 0 -5px;}
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .clearfix {
+      overflow: auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+    }
+
+    .deck-name {
+      color: #090068;
+    }
+
+    /* Responsive columns */
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+
+    /* Style the counter cards */
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      text-align: center;
+      background-color: #d8d5f966;
+      height: 120px;
+    }
+
+    .container {
+      margin: 2em;
+    }
+
+    span {
+      float: right;
+      position: relative;
+      color: white
+    }
+
+    .deck-description {
+      text-align: left;
+      padding-top: 0.5em;
+    }
+
+block navigation
+  .nav
+    a(href="/create") Create new
+
 block content
-  #list-decks
-    ul
-      each deck in decks
-        li
-          a(href='/create/' + deck.id)
-            div name: #{deck.name}
-            div description: #{deck.description}
-            div type: #{deck.type}
-            div category: #{deck.category}
+    div.container
+      div.row.flexbox
+        each deck, i in decks
+          if i%4 === 0 && i!==0
+            div.clearfix
+            div.column.col
+              a(href='/create/' + deck.id)
+                div.card
+                  span.md-chip #{deck.category}
+                  h3.deck-name #{deck.name}
+                  p.deck-description #{deck.description}
+          else
+            div.column.col
+              a(href='/create/' + deck.id)
+                div.card
+                  span.md-chip #{deck.category}
+                  h3.deck-name #{deck.name}
+                  p.deck-description #{deck.description}
