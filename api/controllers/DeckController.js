@@ -125,10 +125,37 @@ module.exports = {
         });
       }
 
-      // return res.json({
-      //   data: deck,
-      //   meta: {}
-      // });
+      if (!_.get(deck, 'links.length')) {
+        return res.view('pages/deck/view', deck);
+      }
+
+      for (let i = 0, ii = deck.links.length; i < ii; i++) {
+        let card = deck.links[i];
+        if (!card.link) { continue; }
+
+        // YouTube
+        let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        let match = card.link.match(regExp);
+        if (match && match[2].length == 11) {
+          card.iframeUrl = `https://www.youtube.com/embed/${match[2]}`;
+          card.iframeWidth = '560';
+          card.iframeHeight = '315';
+        }
+
+        // Twitter
+        else if (card.link.includes('https://twitter.com')) {
+          card.iframeUrl = `https://twitframe.com/show?url=${card.link}`;
+          card.iframeHeight='250';
+          card.iframeWidth='550';
+        }
+
+        // Medium
+        else if (card.link.includes('https://medium.com')) {
+          card.iframeUrl = card.link;
+          card.iframeHeight='100%';
+          card.iframeWidth='100%';
+        }
+      }
 
       res.view('pages/deck/view', deck);
     });

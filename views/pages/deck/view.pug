@@ -2,15 +2,8 @@ extends ../../layouts/default.pug
 
 block styles
   style(type='text/css').
-    .container {
-      max-width: 80%;
-      margin: 2em
-    }
-
-    .deck-description {
-      text-align: left;
-      padding-top: 0.5em;
-      display: inline-block;
+    #navigation {
+      box-shadow: none;
     }
 
     .md-chip {
@@ -23,35 +16,135 @@ block styles
       margin-left: 10px;
     }
 
+    #view-deck {
+      height: 100%;
+      display: -ms-flexbox;
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-box;
+      display: box;
+
+      -ms-flex-direction: row;
+      -webkit-box-orient: horizontal;
+      -moz-box-orient: horizontal;
+      -ms-box-orient: horizontal;
+      box-orient: horizontal;
+    }
+
     .side-nav {
-      background-color: #eeeeee;
-      height: 400px;
-      width: 115px;
-      float: left;
-      padding: 7px;
-      margin-left: 2%;
-      text-align: center;
+      background: linear-gradient(#f6f6f6 0,#fff 100%);
+      height: 100vh;
+      width: 300px;
+      -ms-flex: 0 100px;
+      -webkit-box-flex:  0;
+      -moz-box-flex:  0;
+      -ms-box-flex:  0;
+      box-flex:  0;
+      box-shadow: inset 0px 4px 10px 0px rgba(0, 0, 0, 0.06);
     }
-    
+
+    .preview {
+      -ms-flex: 1;
+      -webkit-box-flex: 1;
+      -moz-box-flex: 1;
+      -ms-box-flex: 1;
+      box-flex: 1;
+      padding: 40px;
+    }
+
     .link-item {
-      font-weight: 900;
-      padding-bottom: 10px;
-      border-bottom: 2px solid blue;
+      padding: 15px;
+      border-bottom: 1px solid #ccc;
+      cursor: pointer;
     }
- 
+
+    .link-item:hover {
+      background: #eaeaea;
+      color: #3c5af3;
+    }
+
+    .link-item.active {
+      background: #eaeaea;
+      color: #3c5af3;
+    }
+
+    .link-info {
+      display: none;
+    }
+
+    .link-info .link-name {
+      font-weight: 600;
+      font-size: 30px;
+    }
+
+    .preview-content {
+      text-align: center;
+      display: none;
+      margin: 20px auto;
+      max-width: 100%;
+      border: none;
+      box-shadow: 0 0.2rem 0.5rem rgba(103,110,144,.2), 0 0 0 0.1rem rgba(103,110,144,.05);
+    }
+
+    .preview-content.not-available {
+      padding: 20px;
+      box-shadow: none;
+    }
+
+    .preview-content .link-url {
+      margin-top: 10px;
+      color: #3c5af3;
+      display: block;
+      font-weight: 600;
+    }
+
 block content
   #view-deck
-    div.container
-      h1.deck-name #{name}
-      h3.deck-description #{description}
-      span.md-chip #{category}
     div.side-nav
       ul
         each link in links
-          li.link-item(data-link=link.link, data-comment=link.comment)
+          li.link-item(data-id=link.id, data-url=link.link, data-comment=link.comment, data-image=link.imageUrl)
             div #{link.name}
+    div.preview
+      .deck-info
+        h1.deck-name #{name}
+        .deck-description #{description}
+        span.md-chip #{category}
+      .link-info
+        .link-name
+        blockquote.link-comment
+      #iframe
+        each link in links
+          if link.iframeUrl
+            iframe.preview-content(src=link.iframeUrl, data-id=link.id, width=link.iframeWidth, height=link.iframeHeight)
+          else
+            .preview-content.not-available(data-id=link.id)
+              img(src=link.imageUrl, alt=link.name)
+              a.link-url(href=link.link, target="_blank")
+                span.fa.fa-external-link &nbsp;View Original
 
 block scripts
-  script. 
+  script.
+    $('.link-item').on('click', function (e) {
+      const self = $(this);
 
+      $('.side-nav .link-item').removeClass('active');
+      self.addClass('active');
+
+      $(`.preview-content`).css('display', 'none');
+      $('.deck-info').hide();
+      $('.link-info').show();
+
+      $('.link-info .link-name').text(self.text());
+
+      if (self.data('comment')) {
+        $('.link-info .link-comment').html(self.data('comment'));
+        $('.link-info .link-comment').show();
+      }
+      else {
+        $('.link-info .link-comment').hide();
+      }
+
+      $(`.preview-content[data-id=${self.data('id')}]`).css('display', 'block');
+    });
 
