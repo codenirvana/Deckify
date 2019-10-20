@@ -6,6 +6,19 @@ block styles
       box-shadow: none;
     }
 
+    .nav {
+      display: inline-block;
+      position: absolute;
+      right: 20px;
+      top: 22px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .nav a {
+      margin-left: 25px;
+    }
+
     .md-chip {
       color: white;
       display: inline-block;
@@ -17,7 +30,7 @@ block styles
     }
 
     #view-deck {
-      height: 100%;
+      height: calc(100% - 72px);
       display: -ms-flexbox;
       display: -webkit-box;
       display: -moz-box;
@@ -33,7 +46,6 @@ block styles
 
     .side-nav {
       background: linear-gradient(#f6f6f6 0,#fff 100%);
-      height: 100vh;
       width: 300px;
       -ms-flex: 0 100px;
       -webkit-box-flex:  0;
@@ -41,6 +53,7 @@ block styles
       -ms-box-flex:  0;
       box-flex:  0;
       box-shadow: inset 0px 4px 10px 0px rgba(0, 0, 0, 0.06);
+      overflow-y: scroll;
     }
 
     .preview {
@@ -50,6 +63,7 @@ block styles
       -ms-box-flex: 1;
       box-flex: 1;
       padding: 40px;
+      overflow-y: scroll;
     }
 
     .link-item {
@@ -68,6 +82,21 @@ block styles
       color: #3c5af3;
     }
 
+    .deck-info .deck-name {
+      font-weight: 600;
+      font-size: 40px;
+      border-bottom: 2px solid #d6d6d640;
+    }
+
+    .deck-info .deck-description {
+      padding: 20px 10px;
+    }
+
+    .deck-info .deck-meta {
+      margin-top: 20px;
+      text-align: right;
+    }
+
     .link-info {
       display: none;
     }
@@ -80,7 +109,7 @@ block styles
     .preview-content {
       text-align: center;
       display: none;
-      margin: 20px auto;
+      margin: 30px auto;
       max-width: 100%;
       border: none;
       box-shadow: 0 0.2rem 0.5rem rgba(103,110,144,.2), 0 0 0 0.1rem rgba(103,110,144,.05);
@@ -91,12 +120,22 @@ block styles
       box-shadow: none;
     }
 
+    .preview-content img {
+      max-width: 100%;
+    }
+
     .preview-content .link-url {
-      margin-top: 10px;
+      margin-top: 30px;
       color: #3c5af3;
       display: block;
       font-weight: 600;
+      font-size: 20px;
     }
+
+block navigation
+  .nav
+    a(href="/me") My decks
+    a(href="/create") Create new
 
 block content
   #view-deck
@@ -109,7 +148,8 @@ block content
       .deck-info
         h1.deck-name #{name}
         .deck-description #{description}
-        span.md-chip #{category}
+        .deck-meta
+          span.md-chip #{category}
       .link-info
         .link-name
         blockquote.link-comment
