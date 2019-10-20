@@ -167,6 +167,14 @@ block styles
       color: #2b2a35;
     }
 
+    .close {
+      float: right;
+    }
+
+    .close:hover {
+      cursor: pointer;
+    }
+
 block navigation
   if !isPublished
     a#publish-deck
@@ -197,8 +205,9 @@ block content
   #cards
     h3 In your deck...
     each link in links
-      a(href=link.link, target="_blank")
-        .card #{link.name}
+      .card 
+        a(href=link.link, target="_blank") #{link.name}
+        span.close(data-deckId=id, data-linkId=link.id) X
 
 block scripts
   script.
@@ -226,7 +235,7 @@ block scripts
           timer: 1000
         });
 
-        addCard(data);
+        addCard({...data, linkId: response.data.linkId});
         reset();
       });
     });
@@ -294,6 +303,31 @@ block scripts
       }, 100);
     });
 
+    $('.close').on('click', function (e) {
+      const self = $(this),
+        deckId = self.attr('data-deckId'),
+        linkId = self.attr('data-linkId');
+
+      console.log(deckId, linkId);
+
+      REQUEST({
+        method: 'DELETE',
+        url: `/v1/decks/${deckId}/links/${linkId}`
+      }, (err, response) => {
+        console.log(err, response);
+        if (err) {
+          console.error(err);
+          return alert('Something went wrong!');
+        }
+
+        Swal.fire(
+          'Link removed from deck!'
+        );
+
+        $(this).css('display', 'none');
+      });
+    });
+
     function reset () {
       $('#add-card-form').trigger('reset');
       $('.link-title, .link-comment, .link-image, .link-btn').hide();
@@ -353,5 +387,5 @@ block scripts
     }
 
     function addCard (card) {
-      $('#cards').append(`<a href=${card.link} target="_blank"><div class='card'>${card.name}</div></a>`);
+      $('#cards').append(`<div class='card'><a href=${card.link} target="_blank">${card.name}</a><span class='close' data-deckId=#{id} data-linkId=${card.linkId}>X</span></div>`);
     }
