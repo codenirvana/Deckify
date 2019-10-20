@@ -91,6 +91,19 @@ block styles
       border-radius: 6px;
     }
 
+      .tweet-button {
+        border: 2px solid #1da1f2;
+        padding: 9px;
+        color: #1da1f2;
+        font-family: 'Nunito';
+        font-weight: bold;
+        background-position: 0 0;
+        border-radius: 7px;
+      }
+      .tweet-button:hover {
+        background-position: 0 -21px;
+      }
+
     @keyframes publish_btn_rainbow {
       0%,
       to {
@@ -154,13 +167,21 @@ block styles
       color: #2b2a35;
     }
 
+    .close {
+      float: right;
+    }
+
+    .close:hover {
+      cursor: pointer;
+    }
+
 block navigation
   if !isPublished
     a#publish-deck
       span Publish
 
 block content
-  #edit-deck
+  #edit-deck(data-url='/' + username + '/' + name)
     h2 #{name}
 
     form#add-card-form(data-url="/v1/links")
@@ -184,8 +205,9 @@ block content
   #cards
     h3 In your deck...
     each link in links
-      a(href=link.link, target="_blank")
-        .card #{link.name}
+      .card 
+        a(href=link.link, target="_blank") #{link.name}
+        span.close(data-deckId=id, data-linkId=link.id) X
 
 block scripts
   script.
@@ -213,7 +235,7 @@ block scripts
           timer: 1000
         });
 
-        addCard(data);
+        addCard({...data, linkId: response.data.linkId});
         reset();
       });
     });
@@ -231,7 +253,8 @@ block scripts
     $('#publish-deck').on('click', function (e) {
       e.preventDefault();
 
-      const self = $(this);
+      const self = $(this),
+        dataUrl = `${window.location.origin}${$('#edit-deck').attr('data-url')}`;
 
       REQUEST({
         method: 'POST',
@@ -243,14 +266,27 @@ block scripts
           return alert('Something went wrong!');
         }
 
-        Swal.fire({
-          position: 'center',
-          type: 'success',
-          title: 'Your deck is published!',
-          showConfirmButton: false,
-          timer: 1000
-        });
+        let tweetString = encodeURIComponent(`Check out this deck I just shared at ${dataUrl}`);
 
+        Swal.fire({
+          title: 'Your deck has been published!',
+          type: 'success',
+          width: 600,
+          padding: '3em',
+          footer: `
+            <a class="tweet-button"
+              target="_blank"
+              href='https://twitter.com/intent/tweet?text=${tweetString}'
+              data-size="large"><i class="fa fa-lg fa-twitter"></i>
+            Tweet
+            </a>`,
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("https://sweetalert2.github.io/images/nyan-cat.gif")
+            center left
+            no-repeat
+          `
+        })
         $('#publish-deck').hide();
       });
     });
@@ -265,6 +301,31 @@ block scripts
           $('.link-title, .link-comment, .link-image, .link-btn').show();
         });
       }, 100);
+    });
+
+    $('.close').on('click', function (e) {
+      const self = $(this),
+        deckId = self.attr('data-deckId'),
+        linkId = self.attr('data-linkId');
+
+      console.log(deckId, linkId);
+
+      REQUEST({
+        method: 'DELETE',
+        url: `/v1/decks/${deckId}/links/${linkId}`
+      }, (err, response) => {
+        console.log(err, response);
+        if (err) {
+          console.error(err);
+          return alert('Something went wrong!');
+        }
+
+        Swal.fire(
+          'Link removed from deck!'
+        );
+
+        $(this).css('display', 'none');
+      });
     });
 
     function reset () {
@@ -326,5 +387,5 @@ block scripts
     }
 
     function addCard (card) {
-      $('#cards').append(`<a href=${card.link} target="_blank"><div class='card'>${card.name}</div></a>`);
+      $('#cards').append(`<div class='card'><a href=${card.link} target="_blank">${card.name}</a><span class='close' data-deckId=#{id} data-linkId=${card.linkId}>X</span></div>`);
     }

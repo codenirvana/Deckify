@@ -11,6 +11,7 @@ module.exports = {
       }
       req.session.authenticated = true;
       req.session.userId = user.id;
+      req.session.username = user.username;
       return res.redirect('/create');
     })(req, res);
   },

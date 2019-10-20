@@ -40,10 +40,10 @@ module.exports = {
         Link
           .addToCollection(linkId, 'decks', deckId)
           .exec((err) => {
-            return next(err);
+            return next(err, linkId);
           });
       }
-    ], (err) => {
+    ], (err, linkId) => {
       if (err) {
         return res.serverError({
           name: 'serverError',
@@ -52,7 +52,9 @@ module.exports = {
       }
 
       return res.json({
-        data: {},
+        data: {
+          linkId
+        },
         meta: {}
       });
     });

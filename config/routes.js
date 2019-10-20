@@ -23,6 +23,7 @@ module.exports.routes = {
   'POST /v1/decks/:id/publish': 'DeckController.publish',
   'GET /:username/:deckname': 'DeckController.getDeckView',
   'GET /:username': 'DeckController.getUserDecksView',
+  'DELETE /v1/decks/:deckId/links/:linkId': 'DeckController.removeLinkAssociation',
 
   // AuthController
   '/authorize': 'AuthController.authorize',
@@ -30,6 +31,6 @@ module.exports.routes = {
 
   // LinkController
   'POST /v1/links': 'LinkController.create',
-  'POST /v1/links/scrape': 'LinkController.scrape'
+  'POST /v1/links/scrape': 'LinkController.scrape',
 
 };
