@@ -12,13 +12,17 @@ module.exports.routes = {
   // Views
   '/': { view: 'pages/homepage' },
   '/login': { view: 'pages/login' },
-  '/create': { view: 'pages/create' },
+
+  // NavController
+  'GET /create': 'NavController.createDeck',
+  'GET /me': 'NavController.userDecks',
 
   // DeckController
+  'GET /create/:id': 'DeckController.editView',
   'POST /v1/decks': 'DeckController.create',
   'POST /v1/decks/:id/publish': 'DeckController.publish',
-  'GET /:username/:deckname': 'DeckController.getDeck',
-  'GET /v1/decks': 'DeckController.getUserDecks',
+  'GET /:username/:deckname': 'DeckController.getDeckView',
+  'GET /:username': 'DeckController.getUserDecksView',
 
   // AuthController
   '/authorize': 'AuthController.authorize',

@@ -1,1 +1,25 @@
-h1 Deckify!
+extends ../layouts/default.pug
+
+block styles
+  style(type='text/css').
+    .nav {
+      display: inline-block;
+      position: absolute;
+      right: 20px;
+      top: 22px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .nav a {
+      margin-left: 25px;
+    }
+
+block navigation
+  .nav
+    a(href="/me") My decks
+    a(href="/create") Create new
+
+block content
+
+block scripts

@@ -1,0 +1,213 @@
+extends ../../layouts/default.pug
+
+block styles
+  style(type='text/css').
+    h2 {
+      font-weight: 700;
+      font-size: 30px;
+      padding-bottom: 25px;
+    }
+
+    #edit-deck {
+      padding: 20px;
+      margin-top: 10px;
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+
+    #add-card-form button {
+      padding: .75em 1.6em .7em;
+      background-color: #334ac0;
+      border: none;
+      color: #fff;
+      font-weight: bolder;
+      cursor: pointer;
+      transition: box-shadow 120ms,background-color 120ms;
+      box-shadow: 0 0.1rem 0.1rem transparent;
+      text-align: center;
+      border-radius: 3px;
+      font-size: 20px;
+      margin-top: 25px;
+      width: 100%;
+    }
+
+    #add-card-form button:hover {
+      background: #586ee0;
+      box-shadow: 0 0.1rem 0.1rem rgba(0,0,0,.3);
+      outline: 0;
+    }
+
+    #card-link {
+      border: 0;
+      border-bottom: 1px solid #dddfe5;
+      border-radius: 0;
+    }
+
+    #card-link:focus {
+      border-bottom: 1px solid #586ee0;
+    }
+
+    .link-title, .link-comment, .link-image, .link-btn {
+      display: none;
+    }
+
+    #cards {
+      background: linear-gradient(#f6f6f6 0,#fff 100%);
+      margin-top: 25px;
+    }
+
+    #publish-deck {
+      width: 100px;
+      text-align: center;
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      background-image: linear-gradient(115deg,#4fcf70,#fad648,#a767e5,#12bcfe,#44ce7b);
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @keyframes publish_btn_rainbow {
+      0%,
+      to {
+        background-image: linear-gradient(115deg, #4fcf70, #fad648, #a767e5, #12bcfe)
+      }
+
+      25% {
+        background-image: linear-gradient(115deg, #fad648, #a767e5, #12bcfe, #4fcf70)
+      }
+
+      50% {
+        background-image: linear-gradient(115deg, #a767e5, #12bcfe, #4fcf70, #fad648)
+      }
+
+      75% {
+        background-image: linear-gradient(115deg, #12bcfe, #4fcf70, #fad648, #a767e5)
+      }
+    }
+
+
+    #publish-deck:hover {
+      -webkit-animation: publish_btn_rainbow .5s linear infinite;
+      animation: publish_btn_rainbow .5s linear infinite;
+    }
+
+    #publish-deck span {
+      padding: 15px;
+      font-size: 16px;
+      align-items: center;
+      background: #fff;
+      border-radius: 3px;
+      display: inline-block;
+      width: calc(100% - 8px);
+      justify-content: center;
+      margin: 3px;
+      box-sizing: border-box;
+      transition: background .5s ease;
+    }
+
+block navigation
+  a#publish-deck
+    span Publish
+
+block content
+  #edit-deck
+    h2 #{name}
+
+    form#add-card-form(data-url="/v1/links")
+      input(type="hidden", name="deckId", value=id)
+
+      .value
+        input#card-link(type="text", name="link", placeholder="Paste your link...", autocomplete="off")
+
+      .link-title.value
+        input(type="text", name="name", placeholder="Card title")
+
+      .link-comment.value
+        input(type="text", name="comment", placeholder="What's your opinion about this? (optional)")
+
+      .link-image.value
+        input(type="hidden", name="imageUrl", placeholder="Card image")
+
+      button.link-btn(type="submit") Add Card
+
+  #cards
+
+block scripts
+  script.
+    $('#add-card-form').on('submit', function (e) {
+      e.preventDefault();
+
+      const self = $(this),
+        data = FORM_DATA(self);
+
+      REQUEST({
+        method: 'POST',
+        url: self.data('url'),
+        data: data
+      }, function (error, response) {
+        if (error) {
+          console.error(error);
+          return alert('Something went wrong!');
+        }
+
+        addCard(data);
+        self.trigger('reset');
+      });
+    });
+
+    $('#publish-deck').on('click', function (e) {
+      e.preventDefault();
+
+      const self = $(this);
+
+      REQUEST({
+        method: 'POST',
+        url: '/v1/decks/#{id}/publish',
+        data: FORM_DATA(self)
+      }, function (error, response) {
+        if (error) {
+          console.error(error);
+          return alert('Something went wrong!');
+        }
+
+        console.log(response);
+      });
+    });
+
+    $("#card-link").on("paste", function(e) {
+      const self = $(this);
+
+      setTimeout(function () {
+        initCard(self.val().trim(), function (err) {
+          if (err) { return; }
+
+          $('.link-title, .link-comment, .link-image, .link-btn').show();
+        });
+      }, 100);
+    });
+
+    function initCard (link, done) {
+      REQUEST({
+        method: 'POST',
+        url: '/v1/links/scrape',
+        data: { link }
+      }, function (error, response) {
+        if (error) {
+          console.error(error);
+          return done(error);
+        }
+
+        $('.link-title input').val(response.data.title);
+        $('.link-image input').val(response.data.image);
+        $('.link-image ').prepend($('<img>',{src: response.data.image}));
+
+        return done();
+      });
+    }
+
+    function addCard (card) {
+      $('#cards').prepend(`<div>${card.link}</div>`);
+    }

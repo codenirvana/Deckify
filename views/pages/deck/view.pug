@@ -1,0 +1,16 @@
+extends ../../layouts/default.pug
+
+block content
+  #view-deck
+    div name: #{name}
+    div description: #{description}
+    div type: #{type}
+    div category: #{category}
+    div links:
+    ul
+      each link in links
+        li
+          div name: #{link.name}
+          div link: #{link.link}
+          div comment: #{link.comment}
+          div imageUrl: #{link.imageUrl}

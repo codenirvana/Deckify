@@ -18,6 +18,12 @@ module.exports.policies = {
   ***************************************************************************/
 
   '*': 'sessionAuth',
+
+  NavController: {
+    createDeck: [],
+    userDecks: []
+  },
+
   AuthController: {
     authorize: [],
     callbackHandler: []

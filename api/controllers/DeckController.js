@@ -6,6 +6,25 @@
  */
 
 module.exports = {
+  createView: (req, res) => {
+    res.view('pages/deck/create');
+  },
+
+  editView: (req, res) => {
+    Deck
+      .findOne({
+        id: req.param('id')
+      })
+      .populate('links')
+      .exec((err, deck) => {
+        if (err || !deck) {
+          return res.redirect('/create');
+        }
+
+        res.view('pages/deck/edit', deck);
+      });
+  },
+
   create: (req, res) => {
     let { description, type, category } = req.body,
       user = _.get(req, 'session.userId', 1),
@@ -63,7 +82,7 @@ module.exports = {
       });
   },
 
-  getDeck: (req, res) => {
+  getDeckView: (req, res) => {
     const username = _.get(req.params, 'username'),
       deckName = _.get(req.params, 'deckname');
 
@@ -88,8 +107,8 @@ module.exports = {
           .exec((err, deck) => {
             if (err || _.isUndefined(deck)) {
               return next(new Error('deckNotFoundError'));
-            } 
-            
+            }
+
             return next(null, deck);
           });
       }
@@ -105,32 +124,48 @@ module.exports = {
         });
       }
 
-      return res.json({
-        data: deck,
-        meta: {}
-      });
+      // return res.json({
+      //   data: deck,
+      //   meta: {}
+      // });
+
+      res.view('pages/deck/view', deck);
     });
   },
 
-  getUserDecks: (req, res) => {
-    const user = _.get(req, 'session.userId', 1);
+  getUserDecksView: (req, res) => {
+    const username = req.param('username'),
+      sessionUserId = _.get(req, 'session.userId', 1);
 
-    Deck
-      .find({
-        user
-      })
-      .exec((err, decks) => {
-        if (err) {
+    User
+      .findOne({username})
+      .exec((err, user) => {
+        if (err || !user) {
           return res.serverError({
             name: 'serverError',
-            message: err.message
+            message: err ? err.message : 'user not found'
           });
         }
 
-        return res.json({
-          data: decks,
-          meta: {}
-        });
+        let query = { user: user.id };
+
+        if (user.id !== sessionUserId) {
+          query.isPublished = 1;
+          query.type = 'public';
+        }
+
+        Deck
+          .find(query)
+          .exec((err, decks) => {
+            if (err) {
+              return res.serverError({
+                name: 'serverError',
+                message: err.message
+              });
+            }
+
+            res.view('pages/deck/list', {decks});
+          });
       });
   }
 };
