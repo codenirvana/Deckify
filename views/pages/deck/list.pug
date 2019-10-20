@@ -71,26 +71,48 @@ block styles
 
     /* Style the counter cards */
     .card {
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0.0625em 0.1875em 0 rgba(0, 0, 0, 0.1), 0 0.5em 0 -0.25em #f2f2f2, 0 0.5em 0.1875em -0.25em rgba(0, 0, 0, 0.1), 0 1em 0 -0.5em #e5e5e5, 0 1em 0.1875em -0.5em rgba(0, 0, 0, 0.1);
       padding: 16px;
       text-align: center;
-      background-color: #d8d5f966;
-      height: 120px;
+      word-break: break-word;
+      background-color: #fff;
+      height: 170px;
+      border-radius: 5px;
+      position: relative;
+      transition: box-shadow 120ms,background-color 120ms;
+    }
+
+    .card:hover {
+      box-shadow: 0 0.2rem 0.5rem rgba(103,110,144,.4), 0 0 0 0.1rem rgba(103,110,144,.05);
     }
 
     .container {
       margin: 0 2em;
     }
 
-    span {
+    .meta span.md-chip {
+      color: white;
       float: right;
-      position: relative;
-      color: white
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    .meta span.author {
+      float: left;
+      opacity: 0.3;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .meta span.author:hover {
+      opacity: 1;
     }
 
     .deck-description {
       text-align: left;
-      padding-top: 0.5em;
+      padding: 15px 0;
     }
 
 block navigation
@@ -107,13 +129,15 @@ block content
             div.column.col
               a(href='/create/' + deck.id)
                 div.card
-                  span.md-chip #{deck.category}
                   h3.deck-name #{deck.name}
                   p.deck-description #{deck.description}
+                  .meta
+                    span.md-chip #{deck.category}
           else
             div.column.col
               a(href='/create/' + deck.id)
                 div.card
-                  span.md-chip #{deck.category}
                   h3.deck-name #{deck.name}
                   p.deck-description #{deck.description}
+                  .meta
+                    span.md-chip #{deck.category}
