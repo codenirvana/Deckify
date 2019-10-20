@@ -20,9 +20,6 @@ module.exports = {
     description: {
       type: 'string'
     },
-    type: {
-      type: 'string'
-    },
     category: {
       type: 'string'
     },

@@ -10,10 +10,6 @@ const Ajv = require('ajv'),
       "description": {
         "type": "string"
       },
-      "type": {
-        "type": "string",
-        "enum": ["public", "private"]
-      },
       "category": {
         "type": "string"
       }
@@ -21,7 +17,6 @@ const Ajv = require('ajv'),
     "required": [
       "name",
       "description",
-      "type",
       "category"
     ]
   },
