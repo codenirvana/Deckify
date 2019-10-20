@@ -303,27 +303,7 @@ block scripts
       }, 100);
     });
 
-    $('.close').on('click', function (e) {
-      const self = $(this),
-        deckId = self.attr('data-deckId'),
-        linkId = self.attr('data-linkId');
-
-      REQUEST({
-        method: 'DELETE',
-        url: `/v1/decks/${deckId}/links/${linkId}`
-      }, (err, response) => {
-        if (err) {
-          console.error(err);
-          return alert('Something went wrong!');
-        }
-
-        Swal.fire(
-          'Link removed from deck!'
-        );
-
-        $(this).css('display', 'none');
-      });
-    });
+    $('.close').on('click', handleLinkDelete);
 
     function reset () {
       $('#add-card-form').trigger('reset');
@@ -383,6 +363,32 @@ block scripts
       });
     }
 
+    function handleLinkDelete (e) {
+      const self = $(this),
+        deckId = self.attr('data-deckId'),
+        linkId = self.attr('data-linkId');
+
+      REQUEST({
+        method: 'DELETE',
+        url: `/v1/decks/${deckId}/links/${linkId}`
+      }, (err, response) => {
+        if (err) {
+          console.error(err);
+          return alert('Something went wrong!');
+        }
+
+        Swal.fire(
+          'Link removed from deck!'
+        );
+
+        $(this).closest('.card').css('display', 'none');
+      });
+    }
+
     function addCard (card) {
-      $('#cards').append(`<div class='card'><a href=${card.link} target="_blank">${card.name}</a><span class='close' data-deckId=#{id} data-linkId=${card.linkId}>X</span></div>`);
+      const element = document.createElement('div');
+      element.innerHTML = `<a href=${card.link} target="_blank">${card.name}</a><span class='close' data-deckId=#{id} data-linkId=${card.linkId}>X</span>`;
+      element.className += 'card';
+      $('#cards').append(element);
+      $(`.card span[data-linkId=${card.linkId}]`).on('click', handleLinkDelete);
     }
