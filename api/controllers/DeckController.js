@@ -26,7 +26,7 @@ module.exports = {
   },
 
   create: (req, res) => {
-    let { description, type, category } = req.body,
+    let { description, category } = req.body,
       user = _.get(req, 'session.userId', 1),
       name = req.body.name.replace(/[^a-z0-9_]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
 
@@ -35,7 +35,6 @@ module.exports = {
         user,
         name,
         description,
-        type,
         category
       })
       .fetch()
@@ -151,7 +150,6 @@ module.exports = {
 
         if (user.id !== sessionUserId) {
           query.isPublished = 1;
-          query.type = 'public';
         }
 
         Deck
