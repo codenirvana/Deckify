@@ -91,6 +91,19 @@ block styles
       border-radius: 6px;
     }
 
+      .tweet-button {
+        border: 2px solid #1da1f2;
+        padding: 9px;
+        color: #1da1f2;
+        font-family: 'Nunito';
+        font-weight: bold;
+        background-position: 0 0;
+        border-radius: 7px;
+      }
+      .tweet-button:hover {
+        background-position: 0 -21px;
+      }
+
     @keyframes publish_btn_rainbow {
       0%,
       to {
@@ -160,7 +173,7 @@ block navigation
       span Publish
 
 block content
-  #edit-deck
+  #edit-deck(data-url='/' + username + '/' + name)
     h2 #{name}
 
     form#add-card-form(data-url="/v1/links")
@@ -231,7 +244,8 @@ block scripts
     $('#publish-deck').on('click', function (e) {
       e.preventDefault();
 
-      const self = $(this);
+      const self = $(this),
+        dataUrl = `${window.location.origin}${$('#edit-deck').attr('data-url')}`;
 
       REQUEST({
         method: 'POST',
@@ -243,14 +257,27 @@ block scripts
           return alert('Something went wrong!');
         }
 
-        Swal.fire({
-          position: 'center',
-          type: 'success',
-          title: 'Your deck is published!',
-          showConfirmButton: false,
-          timer: 1000
-        });
+        let tweetString = encodeURIComponent(`Check out this deck I just shared at ${dataUrl}`);
 
+        Swal.fire({
+          title: 'Your deck has been published!',
+          type: 'success',
+          width: 600,
+          padding: '3em',
+          footer: `
+            <a class="tweet-button"
+              target="_blank"
+              href='https://twitter.com/intent/tweet?text=${tweetString}'
+              data-size="large"><i class="fa fa-lg fa-twitter"></i>
+            Tweet
+            </a>`,
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("https://sweetalert2.github.io/images/nyan-cat.gif")
+            center left
+            no-repeat
+          `
+        })
         $('#publish-deck').hide();
       });
     });

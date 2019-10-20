@@ -21,6 +21,8 @@ module.exports = {
           return res.redirect('/create');
         }
 
+        _.set(deck, 'username', _.get(req, 'session.username'));
+
         res.view('pages/deck/edit', deck);
       });
   },
@@ -164,6 +166,31 @@ module.exports = {
 
             res.view('pages/deck/list', {decks});
           });
+      });
+  },
+
+  removeLinkAssociation: (req, res) => {
+    const deckId = Number(_.get(req, 'params.deckId')),
+      linkId = Number(_.get(req, 'params.linkId'));
+
+    Link
+      .removeFromCollection(
+        linkId,
+        'decks',
+        deckId
+      )
+      .exec((err) => {
+        if (err) {
+          return res.serverError({
+            name: 'serverError',
+            message: err.message
+          });
+        }
+
+        return res.json({
+          data: {},
+          meta: {}
+        });
       });
   }
 };
