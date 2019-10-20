@@ -1,16 +1,57 @@
 extends ../../layouts/default.pug
 
+block styles
+  style(type='text/css').
+    .container {
+      max-width: 80%;
+      margin: 2em
+    }
+
+    .deck-description {
+      text-align: left;
+      padding-top: 0.5em;
+      display: inline-block;
+    }
+
+    .md-chip {
+      color: white;
+      display: inline-block;
+      background: linear-gradient(91.14deg,#3c5af3 0,#8253ff 122.55%);
+      padding: 0 14px;
+      border-radius: 32px;
+      font-size: 13px;
+      margin-left: 10px;
+    }
+
+    .side-nav {
+      background-color: #eeeeee;
+      height: 400px;
+      width: 115px;
+      float: left;
+      padding: 7px;
+      margin-left: 2%;
+      text-align: center;
+    }
+    
+    .link-item {
+      font-weight: 900;
+      padding-bottom: 10px;
+      border-bottom: 2px solid blue;
+    }
+ 
 block content
   #view-deck
-    div name: #{name}
-    div description: #{description}
-    div type: #{type}
-    div category: #{category}
-    div links:
-    ul
-      each link in links
-        li
-          div name: #{link.name}
-          div link: #{link.link}
-          div comment: #{link.comment}
-          div imageUrl: #{link.imageUrl}
+    div.container
+      h1.deck-name #{name}
+      h3.deck-description #{description}
+      span.md-chip #{category}
+    div.side-nav
+      ul
+        each link in links
+          li.link-item(data-link=link.link, data-comment=link.comment)
+            div #{link.name}
+
+block scripts
+  script. 
+
+
