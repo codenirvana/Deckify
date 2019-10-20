@@ -39,7 +39,7 @@ block styles
 
     #add-card-btn {
       padding: .75em 1.6em .7em;
-      background-color: #334ac0;
+      background: linear-gradient(91.14deg,#3c5af3 0,#8253ff 122.55%);
       border: none;
       color: #fff;
       font-weight: bolder;
@@ -54,7 +54,7 @@ block styles
     }
 
     #add-card-btn:hover {
-      background: #586ee0;
+      background: linear-gradient(91.14deg,#8253ff 0,#3c5af3 122.55%);
       box-shadow: 0 0.1rem 0.1rem rgba(0,0,0,.3);
       outline: 0;
     }
@@ -66,7 +66,7 @@ block styles
     }
 
     #add-card-form #card-link:focus {
-      border-bottom: 1px solid #586ee0;
+      border-bottom: 1px solid #3c5af3;
     }
 
     .link-title, .link-comment, .link-image, .link-btn {
@@ -84,11 +84,11 @@ block styles
       position: absolute;
       right: 8px;
       top: 8px;
-      background-image: linear-gradient(115deg,#4fcf70,#fad648,#a767e5,#12bcfe,#44ce7b);
-      border-radius: 6px;
       box-sizing: border-box;
       font-weight: 600;
       cursor: pointer;
+      border: 2px solid #fff;
+      border-radius: 6px;
     }
 
     @keyframes publish_btn_rainbow {
@@ -117,10 +117,9 @@ block styles
     }
 
     #publish-deck span {
-      padding: 15px;
+      padding: 12px;
       font-size: 16px;
       align-items: center;
-      background: #fff;
       border-radius: 3px;
       display: inline-block;
       width: calc(100% - 8px);
@@ -128,10 +127,12 @@ block styles
       margin: 3px;
       box-sizing: border-box;
       transition: background .5s ease;
+      font-weight: 700;
     }
 
     #cards {
       padding: 10px 25px;
+      box-shadow: inset 0px 4px 10px 0px rgba(0, 0, 0, 0.06);
     }
 
     #cards .card {
@@ -145,7 +146,7 @@ block styles
     }
 
     #cards .card:hover {
-      box-shadow: 0 0 0 1px #586ee0;
+      box-shadow: 0 0 0 1px #3c5af3;
     }
 
     #cards a {
