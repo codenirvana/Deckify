@@ -25,6 +25,21 @@ module.exports = {
 
         res.redirect('/' + user.username);
       });
+  },
+
+  home: (req, res) => {
+    Deck
+      .find({
+        isPublished: 1
+      })
+      .populate('user')
+      .exec((err, decks) => {
+        if (err) {
+          return res.redirect('/login');
+        }
+
+        res.view('pages/homepage', {decks});
+      });
   }
 };
 
