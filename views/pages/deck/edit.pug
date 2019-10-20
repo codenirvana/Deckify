@@ -308,13 +308,10 @@ block scripts
         deckId = self.attr('data-deckId'),
         linkId = self.attr('data-linkId');
 
-      console.log(deckId, linkId);
-
       REQUEST({
         method: 'DELETE',
         url: `/v1/decks/${deckId}/links/${linkId}`
       }, (err, response) => {
-        console.log(err, response);
         if (err) {
           console.error(err);
           return alert('Something went wrong!');
