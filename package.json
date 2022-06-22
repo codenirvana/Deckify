@@ -13,7 +13,7 @@
     "connect-redis": "4.0.3",
     "consolidate": "0.15.1",
     "dotenv": "8.2.0",
-    "got": "9.6.0",
+    "got": "11.8.5",
     "grunt": "1.0.1",
     "metascraper": "5.7.6",
     "metascraper-image": "5.7.6",
